@@ -9,6 +9,7 @@ import com.sample.cafekiosk.unit.order.Order;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class CafeKioskTest {
@@ -26,6 +27,7 @@ class CafeKioskTest {
     }
 
     @Test
+    @DisplayName("음료 1개를 추가하면 주문 목록에 담긴다")
     void add() {
         CafeKiosk cafeKiosk = new CafeKiosk();
 
@@ -90,6 +92,23 @@ class CafeKioskTest {
 
         assertThat(cafeKiosk.getBeverages()).isEmpty();
     }
+
+    @DisplayName("주문 목록에 담긴 상품들의 총 금액을 계산할 수 있다")
+    @Test
+    void calculateTotalPrice() {
+        //given
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        cafeKiosk.add(new Americano());
+        cafeKiosk.add(new Latte());
+
+        //when
+        int totalPrice = cafeKiosk.calculateTotalPrice();
+
+        //then
+        assertThat(totalPrice).isEqualTo(8500);
+
+    }
+    
 
     @Test
     void createOrder() {
