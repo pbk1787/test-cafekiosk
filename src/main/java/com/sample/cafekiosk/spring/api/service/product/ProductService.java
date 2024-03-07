@@ -1,5 +1,6 @@
 package com.sample.cafekiosk.spring.api.service.product;
 
+import com.sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
 import com.sample.cafekiosk.spring.api.service.product.response.ProductResponse;
 import com.sample.cafekiosk.spring.domain.product.Product;
 import com.sample.cafekiosk.spring.domain.product.ProductRepository;
@@ -21,4 +22,9 @@ public class ProductService {
             .toList();
     }
 
+    public ProductResponse createProduct(ProductCreateRequest productCreateRequest) {
+        //ProductNumber: DB에서 마지막 저장된 Product의 상품 번호를 읽어와서 +1
+        String latestProductNumber = productRepository.findLatestProductNumber();
+        return null;
+    }
 }
