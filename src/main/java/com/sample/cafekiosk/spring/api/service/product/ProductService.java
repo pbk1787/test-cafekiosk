@@ -5,6 +5,7 @@ import com.sample.cafekiosk.spring.api.service.product.response.ProductResponse;
 import com.sample.cafekiosk.spring.domain.product.Product;
 import com.sample.cafekiosk.spring.domain.product.ProductRepository;
 import com.sample.cafekiosk.spring.domain.product.ProductSellingStatus;
+import com.sample.cafekiosk.spring.domain.product.ProductType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,12 @@ public class ProductService {
     public ProductResponse createProduct(ProductCreateRequest productCreateRequest) {
         //ProductNumber: DB에서 마지막 저장된 Product의 상품 번호를 읽어와서 +1
         String latestProductNumber = productRepository.findLatestProductNumber();
-        return null;
+        return ProductResponse.builder()
+            .productNumber("002")
+            .type(ProductType.HANDMADE)
+            .sellingStatus(ProductSellingStatus.SELLING)
+            .name("카푸치노")
+            .price(5000)
+            .build();
     }
 }
