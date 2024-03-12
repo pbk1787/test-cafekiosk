@@ -5,7 +5,6 @@ import com.sample.cafekiosk.spring.api.service.product.response.ProductResponse;
 import com.sample.cafekiosk.spring.domain.product.Product;
 import com.sample.cafekiosk.spring.domain.product.ProductRepository;
 import com.sample.cafekiosk.spring.domain.product.ProductSellingStatus;
-import com.sample.cafekiosk.spring.domain.product.ProductType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,14 +23,28 @@ public class ProductService {
     }
 
     public ProductResponse createProduct(ProductCreateRequest productCreateRequest) {
-        //ProductNumber: DB에서 마지막 저장된 Product의 상품 번호를 읽어와서 +1
-        String latestProductNumber = productRepository.findLatestProductNumber();
+        String nextProductNumber = createNextProductNumber();
         return ProductResponse.builder()
-            .productNumber("002")
-            .type(ProductType.HANDMADE)
-            .sellingStatus(ProductSellingStatus.SELLING)
-            .name("카푸치노")
-            .price(5000)
+            .productNumber(nextProductNumber)
+            .type(productCreateRequest.getType())
+            .sellingStatus(productCreateRequest.getSellingStatus())
+            .name(productCreateRequest.getName())
+            .price(productCreateRequest.getPrice())
             .build();
+    }
+
+    /**
+     * DB에서 마지막 저장된 Product의 상품 번호를 읽어와서 +1
+     *
+     * @return
+     */
+    private String createNextProductNumber() {
+        String latestProductNumber = productRepository.findLatestProductNumber();
+
+        int latestProductNumberInt = Integer.parseInt(latestProductNumber);
+        int nextProductNumberInt = latestProductNumberInt + 1;
+
+        // 9 -> 009 , 10 -> 010
+        return String.format("%03d", nextProductNumberInt);
     }
 }
