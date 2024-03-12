@@ -8,7 +8,9 @@ import com.sample.cafekiosk.spring.domain.product.ProductSellingStatus;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -22,15 +24,14 @@ public class ProductService {
             .toList();
     }
 
+    @Transactional
     public ProductResponse createProduct(ProductCreateRequest productCreateRequest) {
         String nextProductNumber = createNextProductNumber();
-        return ProductResponse.builder()
-            .productNumber(nextProductNumber)
-            .type(productCreateRequest.getType())
-            .sellingStatus(productCreateRequest.getSellingStatus())
-            .name(productCreateRequest.getName())
-            .price(productCreateRequest.getPrice())
-            .build();
+
+        Product product = Product.create(productCreateRequest, nextProductNumber);
+        Product savedProduct = productRepository.save(product);
+
+        return ProductResponse.of(savedProduct);
     }
 
     /**
@@ -40,6 +41,9 @@ public class ProductService {
      */
     private String createNextProductNumber() {
         String latestProductNumber = productRepository.findLatestProductNumber();
+        if (latestProductNumber == null) {
+            return "001";
+        }
 
         int latestProductNumberInt = Integer.parseInt(latestProductNumber);
         int nextProductNumberInt = latestProductNumberInt + 1;
