@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
+import com.sample.cafekiosk.spring.api.controller.product.request.ProductCreateRequest;
 import com.sample.cafekiosk.spring.api.service.product.ProductService;
 import com.sample.cafekiosk.spring.api.service.product.response.ProductResponse;
 import com.sample.cafekiosk.spring.domain.product.ProductSellingStatus;

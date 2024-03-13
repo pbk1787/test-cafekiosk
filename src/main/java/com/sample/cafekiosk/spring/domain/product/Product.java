@@ -1,6 +1,5 @@
 package com.sample.cafekiosk.spring.domain.product;
 
-import com.sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
 import com.sample.cafekiosk.spring.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -42,14 +41,5 @@ public class Product extends BaseEntity {
         this.name = name;
         this.price = price;
     }
-
-    public static Product create(ProductCreateRequest productCreateRequest, String nextProductNumber) {
-        return Product.builder()
-            .productNumber(nextProductNumber)
-            .type(productCreateRequest.getType())
-            .sellingStatus(productCreateRequest.getSellingStatus())
-            .name(productCreateRequest.getName())
-            .price(productCreateRequest.getPrice())
-            .build();
-    }
+    
 }

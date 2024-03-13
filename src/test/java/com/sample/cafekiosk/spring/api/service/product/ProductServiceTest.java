@@ -5,7 +5,7 @@ import static com.sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-import com.sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
+import com.sample.cafekiosk.spring.api.controller.product.request.ProductCreateRequest;
 import com.sample.cafekiosk.spring.api.service.product.response.ProductResponse;
 import com.sample.cafekiosk.spring.domain.product.Product;
 import com.sample.cafekiosk.spring.domain.product.ProductRepository;

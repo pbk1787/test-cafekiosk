@@ -1,6 +1,6 @@
 package com.sample.cafekiosk.spring.api.service.product;
 
-import com.sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
+import com.sample.cafekiosk.spring.api.service.product.request.ProductCreateServiceRequest;
 import com.sample.cafekiosk.spring.api.service.product.response.ProductResponse;
 import com.sample.cafekiosk.spring.domain.product.Product;
 import com.sample.cafekiosk.spring.domain.product.ProductRepository;
@@ -25,10 +25,10 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse createProduct(ProductCreateRequest productCreateRequest) {
+    public ProductResponse createProduct(ProductCreateServiceRequest productCreateRequest) {
         String nextProductNumber = createNextProductNumber();
 
-        Product product = Product.create(productCreateRequest, nextProductNumber);
+        Product product = productCreateRequest.toEntity(nextProductNumber);
         Product savedProduct = productRepository.save(product);
 
         return ProductResponse.of(savedProduct);
