@@ -23,6 +23,12 @@ public class MailService {
                 .subject(subject)
                 .content(content)
                 .build());
+
+            //sendMail 만 stubbing 하고 나머지 method는 원본 객체를 사용하고 싶다면? spy사용
+            mailSendClient.a();
+            mailSendClient.b();
+            mailSendClient.c();
+            
             return true;
         }
 

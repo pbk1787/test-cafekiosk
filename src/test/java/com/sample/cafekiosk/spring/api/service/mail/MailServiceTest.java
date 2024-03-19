@@ -3,9 +3,9 @@ package com.sample.cafekiosk.spring.api.service.mail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.sample.cafekiosk.spring.client.mail.MailSendClient;
 import com.sample.cafekiosk.spring.domain.history.mail.MailSendHistory;
@@ -15,12 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class MailServiceTest {
 
-    @Mock
+    @Spy
     private MailSendClient mailSendClient;
 
     @Mock
@@ -38,8 +39,13 @@ class MailServiceTest {
 //        MailService mailService = new MailService(mailSendClient, mailSendHistoryRepository);
 
         //stubbing
-        when(mailSendClient.sendMail(anyString(), anyString(), anyString(), anyString()))
-            .thenReturn(true);
+//        when(mailSendClient.sendMail(anyString(), anyString(), anyString(), anyString()))
+//            .thenReturn(true);
+
+        //SPY는 실제 객체를 기반으로 만들어지기 떄문에 Stubber 객체를 사용하여야 한다
+        doReturn(true)
+            .when(mailSendClient)
+            .sendMail(anyString(), anyString(), anyString(), anyString()); //sendMail만 Mocking함
 
         //when
         boolean result = mailService.sendMail("", "", "", "");
