@@ -2,13 +2,17 @@ package com.sample.cafekiosk.spring.api.service.mail;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sample.cafekiosk.spring.client.mail.MailSendClient;
+import com.sample.cafekiosk.spring.domain.history.mail.MailSendHistory;
 import com.sample.cafekiosk.spring.domain.history.mail.MailSendHistoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class MailServiceTest {
 
@@ -18,20 +22,24 @@ class MailServiceTest {
     @Test
     void sendMail() {
         //given
-        MailSendClient mailSendClient = Mockito.mock(MailSendClient.class);
-        MailSendHistoryRepository mailSendHistoryRepository = Mockito.mock(MailSendHistoryRepository.class);
+        MailSendClient mailSendClient = mock(MailSendClient.class);
+        MailSendHistoryRepository mailSendHistoryRepository = mock(MailSendHistoryRepository.class);
 
         MailService mailService = new MailService(mailSendClient, mailSendHistoryRepository);
+
+        //stubbing
+        when(mailSendClient.sendMail(anyString(), anyString(), anyString(), anyString()))
+            .thenReturn(true);
 
         //when
         boolean result = mailService.sendMail("", "", "", "");
 
-        //stubbing
-        when(mailSendClient.sendMail(any(String.class), any(String.class), any(String.class), any(String.class)))
-            .thenReturn(true);
-
         //then
         assertThat(result).isTrue();
+        
+        //save 행위가 1번 불렸는지 검증
+        verify(mailSendHistoryRepository, times(1))
+            .save(any(MailSendHistory.class));
 
     }
 }
