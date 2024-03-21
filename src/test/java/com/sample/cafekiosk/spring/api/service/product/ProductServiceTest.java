@@ -12,7 +12,10 @@ import com.sample.cafekiosk.spring.domain.product.ProductRepository;
 import com.sample.cafekiosk.spring.domain.product.ProductSellingStatus;
 import com.sample.cafekiosk.spring.domain.product.ProductType;
 import java.util.List;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +32,30 @@ class ProductServiceTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @BeforeAll
+    static void beforeAll() {
+        // 테스트 클래스 전체 실행 전에 한번 실행됨
+    }
+
+    @BeforeEach
+    void setUp() {
+        //매 테스트 메소드 실행 전에 작업
+        //공유 변수를 사용하게되어 사용을 지양하는 것이 좋다
+        //문서로서의 역할을 하기가 어려워짐
+
+        //각 테스트 입장에서 봤을 때: 아예 몰라도 테스트 내용을 이해하는데 문제가 없는가?
+        //                      수정해도 모든 테스트에 영향을 주지 않는가?
+        // 위 두 가지에 속한다면 beforeEach를 사용해도 좋음
+    }
+
+    @AfterAll
+    static void afterAll() {
+        //테스트 클래스 전체가 끝나고 한번 실행됨
+    }
+
     @AfterEach
     void tearDown() {
+        //매 테스트 메소드가 실행 된 후에 작업
         productRepository.deleteAllInBatch();
     }
 
