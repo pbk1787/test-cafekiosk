@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.2'
     id 'io.spring.dependency-management' version '1.1.4'
+    id "org.asciidoctor.jvm.convert" version "3.3.2" //plugin 추가
 }
 
 group = 'com.sample'
@@ -15,6 +16,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    asciidoctorExt
 }
 
 repositories {
@@ -39,8 +41,39 @@ dependencies {
 
     //Guava
     implementation("com.google.guava:guava:33.1.0-jre")
+
+    //RestDocs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+ext { //전역변수
+    snippetsDir = file('build/generated-snippets') //문서 조각(snippets) 디렉토리 정의
+}
+
+test { //테스트가 끝난 결과물을 snippetsDir에 넣는다
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir //snippetsDir에 있는 결과물을 받아서
+    configurations 'asciidoctorExt' //asciidoctor로 문서를 만듦
+
+    sources { // 특정 파일만 html로 만든다.
+        include("**/index.adoc")
+    }
+
+    baseDirFollowsSourceFile() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
+    dependsOn test //test에 의존성이 있음. test가 수행된 후 실행됨.
+}
+
+bootJar {
+    dependsOn asciidoctor //asciidoctor애 의존성이 있음. asciidoctor가 수행된 후 실행됨
+    from("${asciidoctor.outputDir}") { //문서가 나오면 아래 경로에 복사
+        into 'static/docs'
+    }
 }
