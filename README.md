@@ -31,6 +31,7 @@
 - h2
 - JPA
 - JUnit5
+- Spring REST Docs
 
 ## ✔ 테스트 개념 잡기
 
